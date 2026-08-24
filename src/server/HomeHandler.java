@@ -43,7 +43,7 @@ public class HomeHandler implements HttpHandler {
             String path = exchange.getRequestURI().getPath();
             if (!path.equals("/")) {
                 SimpleHttpServer.sendResponse(exchange, 404,
-                        SimpleHttpServer.TYPE_TEXT, "404 Not Found : " + path);
+                        SimpleHttpServer.TYPE_TEXT, "444 Not Found : " + path);
                 return;
             }
             // Content-Type 을 text/html 로 보내야 브라우저야 HTML 로 해석한다.
