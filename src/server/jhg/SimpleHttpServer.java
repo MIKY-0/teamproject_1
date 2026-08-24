@@ -1,8 +1,10 @@
-package server;
+package server.jhg;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import server.HealthHandler;
+import server.UserApiHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
