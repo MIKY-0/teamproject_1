@@ -47,7 +47,7 @@ public class UserApiHandler implements HttpHandler {
                 String query = exchange.getRequestURI().getQuery();
 
 //                Thread.sleep(2000);
-                if(query == null) {
+                if(query.isEmpty() && path.equals("/api/users")) {
                     handleGet(exchange);
                 } else if(query != null){
                     getById(exchange);
@@ -96,8 +96,8 @@ public class UserApiHandler implements HttpHandler {
     }
 
     private void getById(HttpExchange exchange) throws IOException {
-       String url = exchange.getRequestURI().getPath();
-       String getUrl = "/api/users";
+//       String url = exchange.getRequestURI().getPath();
+//       String getUrl = "/api/users";
 //       int id = Integer.parseInt(url.substring(getUrl.length() + 1));
        int queryId = Integer.parseInt(exchange.getRequestURI().getQuery().substring(3));
 
