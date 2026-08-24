@@ -43,11 +43,19 @@ public class UserApiHandler implements HttpHandler {
             String method = exchange.getRequestMethod();
 
             if (method.equals("GET")) {
+                String path = exchange.getRequestURI().getPath();
+                String query = exchange.getRequestURI().getQuery();
 
-                Thread.sleep(2000);
+//                Thread.sleep(2000);
+                if(query == null) {
+                    handleGet(exchange);
+                } else if(query != null){
+                    getById(exchange);
+                } else {
+                    SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
+                            "존재하지 않는 주소입니다.");
+                }
 
-                handleGet(exchange);
-                getById(exchange);
             } else if(method.equals("POST")) {
                 handlePost(exchange);
             } else {
@@ -83,18 +91,25 @@ public class UserApiHandler implements HttpHandler {
     private void handleGet(HttpExchange exchange) throws IOException {
         // sendJson 임 !
         SimpleHttpServer.sendJson(exchange, 200, copyUserList());
-        String path = exchange.getRequestURI().getPath();
-        System.out.println(path);
+//        String path = exchange.getRequestURI().getPath();
+//        System.out.println(path);
     }
 
-    private void getById(HttpExchange exchange) {
-        String url = exchange.getRequestURI().getPath();
-        String getUrl = "/api/users";
-        if(url.startsWith(getUrl)) {
-            String newUrl = url.substring(getUrl.length() + 1);
-            System.out.println(newUrl);
+    private void getById(HttpExchange exchange) throws IOException {
+       String url = exchange.getRequestURI().getPath();
+       String getUrl = "/api/users";
+//       int id = Integer.parseInt(url.substring(getUrl.length() + 1));
+       int queryId = Integer.parseInt(exchange.getRequestURI().getQuery().substring(3));
+
+       for(User user : userList ) {
+           if(queryId == user.getId()) {
+               SimpleHttpServer.sendJson(exchange , 200 , user);
+               return;
+           }
+       }
+       SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT , "찾는 유저가 없습니다.");
         }
-    }
+
 
 
     /**
