@@ -100,16 +100,26 @@ public class UserApiHandler implements HttpHandler {
 //       String url = exchange.getRequestURI().getPath();
 //       String getUrl = "/api/users";
 //       int id = Integer.parseInt(url.substring(getUrl.length() + 1));
-       int queryId = Integer.parseInt(exchange.getRequestURI().getQuery().substring(3));
-
+       try {
+        int queryId = Integer.parseInt(exchange.getRequestURI().getQuery().substring(3));
        for(User user : userList ) {
            if(queryId == user.getId()) {
                SimpleHttpServer.sendJson(exchange , 200 , user);
                return;
            }
        }
-       SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT , "찾는 유저가 없습니다.");
-        }
+
+       SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
+               "찾는 유저가 없습니다.");
+//           SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_HTML ,
+//                   UserErrorHtml.htmlNoUser);
+       } catch (Exception e) {
+        SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
+                "유저 ID를 입력해주세요");
+//           SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_HTML ,
+//                   UserErrorHtml.htmlNoId);
+       }
+    }
 
 
 
