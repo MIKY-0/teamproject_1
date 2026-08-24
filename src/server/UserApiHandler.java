@@ -46,7 +46,6 @@ public class UserApiHandler implements HttpHandler {
                 String path = exchange.getRequestURI().getPath();
                 String query = exchange.getRequestURI().getQuery();
 
-//                Thread.sleep(2000);
                 if(query.isEmpty() && path.equals("/api/users")) {
                     handleGet(exchange);
                 } else if(query != null){
