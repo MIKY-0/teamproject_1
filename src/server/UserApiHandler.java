@@ -82,6 +82,8 @@ public class UserApiHandler implements HttpHandler {
     private void handleGet(HttpExchange exchange) throws IOException {
         // sendJson 임 !
         SimpleHttpServer.sendJson(exchange, 200, copyUserList());
+        String path = exchange.getRequestURI().getPath();
+        System.out.println(path);
     }
 
 

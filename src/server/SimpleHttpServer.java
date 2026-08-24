@@ -127,3 +127,11 @@ public class SimpleHttpServer {
     }
 
 } // end of class
+
+
+/*
+{
+ "name" : "티모",
+  "email" : "a@naver.com"
+}
+ */
