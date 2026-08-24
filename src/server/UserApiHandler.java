@@ -46,6 +46,8 @@ public class UserApiHandler implements HttpHandler {
                 String path = exchange.getRequestURI().getPath();
                 String query = exchange.getRequestURI().getQuery();
 
+                // query의 값은 id가 없다면 "/users?" 이렇게 온다. 그럼 query는 null이 아니라 "" 빈문자열로 오기때문에
+                // query.isEmpty() 써주자.
                 if(query.isEmpty() && path.equals("/api/users")) {
                     handleGet(exchange);
                 } else if(query != null){
