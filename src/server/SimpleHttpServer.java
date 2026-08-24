@@ -47,7 +47,6 @@ public class SimpleHttpServer {
          * HttpServer.create(new InetSocketAddress(PORT), 0);
          * 둘다 이 포트로 들어오는 연결을 내가 받겠다. 라고 운영체제에 등록하는 일 이다.
          * 차이는 받는 바이트를 누가 해석하느냐 뿐이다.
-         *
          * 첫 번째 인자 : InetSocketAddress = 주소 + 포트
          * new InetSocketAddress("127.0.0.1", 8080) 그 주소로 들어온 요청만 받는다. 즉 외부에서 오는 요청은 안 받음
          *

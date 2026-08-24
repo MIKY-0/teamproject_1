@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
  *
  * Gson 은 "자바 객체" 와 "JSON 문자열" 을 서로 바꿔 주는 라이브러리이다.
  * 그러려면 먼저 담을 그릇, 즉 클래스가 있어야 한다.
- *
  * 필드 이름이 곧 JSON 의 키가 된다.
  *  {"id" : 1, "name" : "홍길동" , "email" : "abc@naver.com"}
  *

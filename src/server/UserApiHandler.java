@@ -122,5 +122,37 @@ public class UserApiHandler implements HttpHandler {
         SimpleHttpServer.sendJson(exchange, 201, user);
     }
 
+    private void getUserById(HttpExchange exchange) {
+        try {
+            String req = SimpleHttpServer.readRequestBody(exchange);
+            String method = exchange.getRequestMethod();
+
+            if(exchange.getResponseCode() != 200) {
+                System.out.println("요청 실패");
+                return;
+            }
+
+            if(method.equals("GET")) {
+                String reqBody = new String(exchange.getRequestBody().readAllBytes());
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void createUserById(HttpExchange exchange) {
+        try {
+            String req = SimpleHttpServer.readRequestBody(exchange);
+            String method = exchange.getRequestMethod();
+
+            if(method.equals("POST")) {
+                String reqBody = new String(exchange.getRequestBody().readAllBytes());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 } // end of class
