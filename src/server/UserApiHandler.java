@@ -47,6 +47,7 @@ public class UserApiHandler implements HttpHandler {
                 Thread.sleep(2000);
 
                 handleGet(exchange);
+                getById(exchange);
             } else if(method.equals("POST")) {
                 handlePost(exchange);
             } else {
@@ -84,6 +85,15 @@ public class UserApiHandler implements HttpHandler {
         SimpleHttpServer.sendJson(exchange, 200, copyUserList());
         String path = exchange.getRequestURI().getPath();
         System.out.println(path);
+    }
+
+    private void getById(HttpExchange exchange) {
+        String url = exchange.getRequestURI().getPath();
+        String getUrl = "/api/users";
+        if(url.startsWith(getUrl)) {
+            String newUrl = url.substring(getUrl.length() + 1);
+            System.out.println(newUrl);
+        }
     }
 
 
