@@ -37,16 +37,16 @@ public class UserApiHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
-            // /api/users 경로 + Method (동작 정의) - GET, POST
-            // 즉, 경로가 같아도 Method 가 다르면 하는 일이 다르다.
-            // 그래서 이 핸들러 안에서 메서드로 한 번 더 갈라 준다.
             String method = exchange.getRequestMethod();
+            String url = exchange.getRequestURI().getPath();
+            String query = exchange.getRequestURI().getQuery();
 
             if (method.equals("GET")) {
+                if(url.equals("/api/users") && query.isEmpty()) handleGet(exchange);
+                else if (query != null) getById(exchange);
+                else SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
+                            "잘못된 요청입니다.");
 
-                Thread.sleep(2000);
-
-                handleGet(exchange);
             } else if(method.equals("POST")) {
                 handlePost(exchange);
             } else {
@@ -122,23 +122,19 @@ public class UserApiHandler implements HttpHandler {
         SimpleHttpServer.sendJson(exchange, 201, user);
     }
 
-    private void getUserById(HttpExchange exchange) {
-        try {
-            String req = SimpleHttpServer.readRequestBody(exchange);
-            String method = exchange.getRequestMethod();
+    private void getById(HttpExchange exchange) throws IOException {
+          String query = exchange.getRequestURI().getQuery();
+          int id = Integer.parseInt(query.substring(3));
 
-            if(exchange.getResponseCode() != 200) {
-                System.out.println("요청 실패");
-                return;
-            }
+          for(User user : userList) {
+              if(id == user.getId()) {
+                  SimpleHttpServer.sendJson(exchange , 200 , user);
+                  return;
+              }
+          }
+          SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
+                  "존재하지 않는 ID입니다.");
 
-            if(method.equals("GET")) {
-                String reqBody = new String(exchange.getRequestBody().readAllBytes());
-
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void createUserById(HttpExchange exchange) {
