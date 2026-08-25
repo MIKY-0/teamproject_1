@@ -124,16 +124,24 @@ public class UserApiHandler implements HttpHandler {
 
     private void getById(HttpExchange exchange) throws IOException {
           String query = exchange.getRequestURI().getQuery();
+
+        if(query.substring(3).isEmpty()) {
+            SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
+                    "ID를 입력하세요");
+            return;
+        }
           int id = Integer.parseInt(query.substring(3));
 
-          for(User user : userList) {
-              if(id == user.getId()) {
-                  SimpleHttpServer.sendJson(exchange , 200 , user);
-                  return;
+              for(User user : userList) {
+                  if(id == user.getId()) {
+                      SimpleHttpServer.sendJson(exchange , 200 , user);
+                      return;
+                  }
               }
-          }
-          SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
-                  "존재하지 않는 ID입니다.");
+              SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
+                      "존재하지 않는 ID입니다.");
+
+
 
     }
 
