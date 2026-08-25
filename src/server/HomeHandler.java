@@ -25,8 +25,8 @@ public class HomeHandler implements HttpHandler {
               <body>
                 <h1 style='color:blue'>내가 자바로 만든 순수 HTTP 서버</h1>
                 <ul>
-                  <li><a href="/health">서버 상태 확인</a></li>
                   <li><a href="/api/users">사용자 목록(JSON)</a></li>
+                  <li><a href="/api/login">로그인/회원가입</a></li>
                 </ul>
               </body>
             </html>
