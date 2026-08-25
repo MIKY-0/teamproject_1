@@ -139,12 +139,12 @@ public class UserApiHandler implements HttpHandler {
 
     private void createUserById(HttpExchange exchange) {
         try {
-            String req = SimpleHttpServer.readRequestBody(exchange);
             String method = exchange.getRequestMethod();
+            String[] body = SimpleHttpServer.readRequestBody(exchange).split("&");
+            String name = body[0].substring(5);
+            String email = body[1].substring(6);
 
-            if(method.equals("POST")) {
-                String reqBody = new String(exchange.getRequestBody().readAllBytes());
-            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
