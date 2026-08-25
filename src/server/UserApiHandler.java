@@ -39,17 +39,37 @@ public class UserApiHandler implements HttpHandler {
         try {
             String method = exchange.getRequestMethod();
             String url = exchange.getRequestURI().getPath();
-            String query = exchange.getRequestURI().getQuery();
+            String query = exchange.getRequestURI().getQuery() == null ? "" : exchange.getRequestURI().getQuery();
+            String reqBody = SimpleHttpServer.readRequestBody(exchange);
+
+// ================   등록 바디에 이름,이메일 구분 --> 데이터 없으면 목록으로 페이지. ================
 
             if (method.equals("GET")) {
                 if(url.equals("/api/users") && query.isEmpty()) handleGet(exchange);
-                else if (query != null) getById(exchange);
+                else if (!query.isEmpty()) getById(exchange);
                 else SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
                             "잘못된 요청입니다.");
 
-            } else if(method.equals("POST")) {
-                handlePost(exchange);
-            } else {
+            } else if(method.equals("POST") && reqBody.isEmpty()) {
+                handlePost(exchange , reqBody);
+            } else if (method.equals("POST") && !reqBody.isEmpty()) {
+                String[] body = reqBody.split("&");
+                String[] emails = body[1].split("%");
+
+                System.out.println("body : " + body);
+                String name = body[0].substring(5);
+                String email = emails[0].substring(6);
+
+                System.out.println("name : name" + " ,  email : " + email);
+                if(name.isEmpty() || email.isEmpty()) {
+                    SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_HTML ,
+                            UserErrorHtml.htmlNoNameEmail);
+                    return;
+                }
+                System.out.println("reqbody : " + reqBody);
+                createUserById(exchange , reqBody , name , email);
+            }
+            else {
                 // 405 를 보낼 때는 어떤 메서드가 되는지 Allow 헤더로 알려주는 것이 규칙이다.
                 exchange.getResponseHeaders().set("Allow", "GET, POST");
                 SimpleHttpServer.sendResponse(exchange, 405,
@@ -88,16 +108,15 @@ public class UserApiHandler implements HttpHandler {
     /**
      *  POST 요청 : 요청 본문이(HTTP 요청 메세지 바디) 있다
      */
-    private void handlePost(HttpExchange exchange) throws IOException {
+    private void handlePost(HttpExchange exchange , String reqBody) throws IOException {
         // 1. HTTP 요청 바디를 읽어야 한다.
-        String requestBody = SimpleHttpServer.readRequestBody(exchange);
-        System.out.println("POST 요청 [api/users] 받은 본문 확인 : " + requestBody);
+        System.out.println("POST 요청 [api/users] 받은 본문 확인 : " + reqBody);
 
         // 2. JSON 문자열을 User 객체로 변환한다.
         // 주의
         User user;
         try {
-            user = new Gson().fromJson(requestBody, User.class);
+            user = new Gson().fromJson(reqBody, User.class);
         } catch (JsonSyntaxException e) {
             SimpleHttpServer.sendResponse(exchange, 400,
                     SimpleHttpServer.TYPE_TEXT, "JSON 형식이 올바르지 않습니다");
@@ -126,8 +145,8 @@ public class UserApiHandler implements HttpHandler {
           String query = exchange.getRequestURI().getQuery();
 
         if(query.substring(3).isEmpty()) {
-            SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
-                    "ID를 입력하세요");
+            SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_HTML ,
+                    UserErrorHtml.htmlNoId);
             return;
         }
           int id = Integer.parseInt(query.substring(3));
@@ -138,24 +157,13 @@ public class UserApiHandler implements HttpHandler {
                       return;
                   }
               }
-              SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_TEXT ,
-                      "존재하지 않는 ID입니다.");
-
-
-
+              SimpleHttpServer.sendResponse(exchange , 404 , SimpleHttpServer.TYPE_HTML ,
+                      UserErrorHtml.htmlNoUser);
     }
 
-    private void createUserById(HttpExchange exchange) {
-        try {
-            String method = exchange.getRequestMethod();
-            String[] body = SimpleHttpServer.readRequestBody(exchange).split("&");
-            String name = body[0].substring(5);
-            String email = body[1].substring(6);
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private void createUserById(HttpExchange exchange , String reqBody , String name , String email) {
+        User user = new User(name , email);
+        userList.add(user);
     }
 
 
