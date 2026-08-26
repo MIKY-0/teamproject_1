@@ -26,7 +26,7 @@ public class UserErrorHtml {
                    <h1>유저 ID를 입력하세요.</h1>
                    <br />
                
-                   <a href="http://127.0.0.1:5500/team/index11.html"><button type="submit">목록으로</button></a>
+                   <a href="http://127.0.0.1:5500/ch17/index11.html"><button type="submit">목록으로</button></a>
                  </body>
                </html>
                
@@ -57,7 +57,7 @@ public class UserErrorHtml {
                    <h1>존재하지 않는 유저 ID입니다.</h1>
                    <br />
                
-                   <a href="http://127.0.0.1:5500/team/index11.html"><button type="submit">목록으로</button></a>
+                   <a href="http://127.0.0.1:5500/ch17/index11.html"><button type="submit">목록으로</button></a>
                  </body>
                </html>
                
@@ -88,7 +88,7 @@ public class UserErrorHtml {
                    <h1>이름과 이메일은 비어있을 수 없습니다.</h1>
                    <br />
                
-                   <a href="http://127.0.0.1:5500/team/index11.html"><button type="submit">목록으로</button></a>
+                   <a href="http://127.0.0.1:5500/ch17/index11.html"><button type="submit">목록으로</button></a>
                  </body>
                </html>
                
